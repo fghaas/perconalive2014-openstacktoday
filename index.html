@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Greetings from Havana: A fresh perspective on globally distributed OpenStack</title>
+    <title>What is OpenStack, and what's in it for DBAs?</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
@@ -25,394 +25,67 @@
       <div class="slides">
 	<section id="start">
 	  <img class="with-heading" src="openstack-logo.svg"/>
-	  <h3>Greetings from Havana</h3>
-	  <p>A fresh perspective on globally distributed OpenStack</p>
+	  <h3>What is OpenStack, and what's in it for DBAs?</h3>
 	</section>
 
-	<section id="intro">
-	  <section>
-	    <h2>What are we talking about?</h2>
-	    <aside class="notes">
-	      <p>So what is the topic of today's talk? We'll be
-	      talking about...</p>
-	    </aside>
-	  </section>
-	  <section>
-	    <h2>Geographically distributed OpenStack</h2>
-	    <aside class="notes">
-	      <p>... geographically distributed OpenStack clouds. So
-	      what is that? What makes our cloud "geographically
-	      distributed"? Is it a specific <em>distance</em> between
-	      sites (in kilometers)? Or is it a specific mode of
-	      <em>organizing</em> our cloud? Or a specific
-	      <em>goal</em> we want to achieve with it?</p>
-	    </aside>
-	  </section>
-	  <section>
-	    <p>An OpenStack cloud (or multiple clouds) spanning
-	    <strong>multiple geographical sites</strong> with
-	    <strong>limited bandwith</strong> and <strong>significant
-	    latency</strong> between them.</p>
-	    <aside class="notes">
-	      <p>You should understand <strong>significant</strong> in
-	      the sense as it is used in statistics, that is,
-	      non-negligeable or simply, "making a difference".</p>
-	      <p>In general, we're talking several orders of magnitude
-	      greater than a LAN. LAN Ethernet latency is typically
-	      about 100 microseconds, between sites we usually get on
-	      the order of 1-10 milliseconds (that is, 10 times to 100
-	      times greater than in a LAN).
-	    </aside>
-	  </section>
-	  <section>
-	    <h2>Why would we want that?</h2>
-	  </section>
-	  <section>
-	    <h3>Disaster Recovery</h3>
-	    <p class="fragment">Being able to <strong>recover
-	    services</strong> in a <strong>backup site</strong> if the
-	    primary site is <strong>disabled</strong> or
-	    <strong>unavailable.</strong></p>
-	    <aside class="notes">
-	      <p>This is the classic no-brainer motivation for
-	      geographic distribution. What if an A380 slams into my
-	      DC, or a backhoe cuts the fiber to my building?</p>
-	    </aside>
-	  </section>
-	  <section>
-	    <h3>Local Affinity</h3>
-	    <p class="fragment">Being able to <strong>host content or
-	    services</strong> in <strong>geographical</strong> or
-	    <strong>legal proximity</strong> to your users.</p>
-	    <aside class="notes">
-	      <p>You may want to host your services in the general
-	      geographical area as your users. This may be for
-	      performance reasons, but jurisdiction considerations
-	      also apply: you might want to offer compliance with a
-	      specific set of laws when your users demand that
-	      compliance. Think users wanting EU data protection laws
-	      or not wanting to be spied on by some &mdash; cough
-	      &mdash; three-letter government agencies associated with
-	      three-letter countries.</p>
-	    </section>
-	    <section>
-	      <h3>Follow The Sun</h3>
-	      <p class="fragment">Being able to <strong>geographically
-	      position</strong> your services based on <strong>time of
-	      day</strong> or other time-based parameters.</p>
-	      <aside class="notes">Your services may be
-	      latency-critical, and may experience peaks based on time
-	      of day (or year). It may be cost effective to host your
-	      services in such a way that they are always closest to
-	      the majority of your users.</aside>
-	    </section>
-	  </section>
+	<section id="intro"
+		 data-markdown="intro.md"
+		 data-separator="^\n\n\n"
+		 data-vertical="^\n\n"
+		 data-notes="^Note:" ></section>
+
+	<section id="about-openstack"
+		 data-markdown="about-openstack.md"
+		 data-separator="^\n\n\n"
+		 data-vertical="^\n\n"
+		 data-notes="^Note:" ></section>
+
+	<section id="it-started-here"
+		 data-markdown="it-started-here.md"
+		 data-separator="^\n\n\n"
+		 data-vertical="^\n\n"
+		 data-notes="^Note:" ></section>
+
+	<section id="vm-startup"
+		 data-markdown="vm-startup.md"
+		 data-separator="^\n\n\n"
+		 data-vertical="^\n\n"
+		 data-notes="^Note:" ></section>
+	
+	<section id="whats-in-it-for-dbas"
+		 data-markdown="whats-in-it-for-dbas.md"
+		 data-separator="^\n\n\n"
+		 data-vertical="^\n\n"
+		 data-notes="^Note:" ></section>
+
+	<section id="trove"
+		 data-markdown="trove.md"
+		 data-separator="^\n\n\n"
+		 data-vertical="^\n\n"
+		 data-notes="^Note:" ></section>
+
+	<section>
+	  <iframe class="with-heading" src="http://localhost:4122"></iframe>
 	</section>
 
-	<section id="expectations">
-	  <section>
-	    <h2>What do we need in a distributed cloud?</h2>
-	  </section>
-	  <section>
-	    <h3>Unified user management</h3>
-	    <p class="fragment">The ability for <strong>any
-	    user</strong> to use their <strong>authentication
-	    credentials</strong>, unmodified, across the entire
-	    cloud.</p>
-	  </section>
-	  <section>
-	    <h3>Unified user data</h3>
-	    <p class="fragment">The ability to keep <strong>persistent
-	    user data</strong> available to services, <strong>no
-	    matter where they run.</strong>
-	  </section>
-	  <section>
-	    <h3>Unified virtual network</h3>
-	    <p class="fragment">The ability to provide a
-	    <strong>unified logical view</strong> of the network
-	    connections between sites, which is
-	    <strong>decoupled</strong> from a <strong>heterogeneous
-	    physical network.</strong></p>
-	  </section>
-	  <section>
-	    <h3>Unified orchestration</h3>
-	    <p class="fragment">The ability to <strong>automate,
-	    deploy and orchestrate</strong> services across the
-	    cloud.</p>
-	  </section>
-	  <section>
-	    <h3>Unified user interface</h3>
-	    <p class="fragment">The ability to <strong>manage, observe
-	    and modify</strong> cloud workloads from a single UI.</p>
-	  </section>
-	  <section>
-	    <h3>Unified API access</h3>
-	    <p class="fragment">The ability to <strong>interact
-	    programmatically</strong> with the entire cloud in a
-	    streamlined fashion.</p>
-	  </section>
-	</section>
-
-	<section id="options">
-	  <section>
-	    <h3>Which options does OpenStack provide for segregating clouds?</h3>
-	  </section>
-	  <section>
-	    <h1>4</h1>
-	    <h1 class="fragment">+1</h1>
-	    <aside class="notes">In total, we have 4 different options to
-	    segregate our cloud (plus another, which is just to not
-	    care and run completely separate OpenStack clouds).</aside>
-	  </section>
-	  <section>
-	    <h3>Availability Zones</h3>
-	    <p class="fragment">All services are shared, compute hosts
-	    are segregated</p>
-	    <aside class="notes">Not suitable for geographic
-	    distribution. Does not take network failures in stride,
-	    really expects the network to not fail. So: unless you're
-	    a telco and you own your fiber, this approach isn't for
-	    you.</aside>
-	  </section>
-	  <section>
-	    <h3>Host aggregates</h3>
-	    <p class="fragment">All services are shared, compute hosts
-	    are grouped</p>
-	    <aside class="notes">Similar approach to availability
-	    zones, but usually not used for availability purposes,
-	    rather to place guests on "trusted" hardware. Same
-	    limitations as the AZ approach.</aside>
-	  </section>
-	  <section>
-	    <h3>Cells</h3>
-	    <p class="fragment">Nova is segregated by sites,
-	    everything else is shared</p>
-	    <aside class="notes">On the Nova side, this approach is
-	    superior for distributed computing compared to the
-	    others. But it doesn't do anything good for the
-	    distribution of other services, notably Glance and
-	    Cinder.</aside>
-	  </section>
-	  <section>
-	    <h3>Multiple regions</h3>
-	    <p class="fragment">Completely separate OpenStack
-	    installations unified by a single Keystone</p>
-	    <aside class="notes">This is really the only option we
-	    have for truly distributed clouds. Which introduces us to
-	    a different problem altogether.</aside>
-	  </section>
-	</section>
-
-	<section id="challenge">
-	  <section>
-	    <h2>So what's the real challenge in all this?</h2>
-	  </section>
-	  <section>
-	    <p>It all boils down to</p>
-	    <h1>Replication</h1>
-	  </section>
-	  <section>
-	    <p>In OpenStack, <strong>most</strong> services split
-	    <strong>data</strong> and <strong>metadata.</strong></p>
-	    <p class="fragment"><strong>Metadata</strong> usually goes
-	    into a <strong>relational database,</strong><br/> whereas
-	    <strong>data</strong> goes into a <strong>service-specific
-	    store.</strong>
-	  </section>
-	  <section>
-	    <p>That means we must <strong>separately</strong>
-	    replicate data and metadata, while keeping them
-	    <strong>consistent.</strong></p>
-	  </section>
-	  <section>
-	    <p>Unfortunately, that's</p>
-	    <h3 class="fragment">damn near impossible</h3></p>
-	  </section>
-	  <section>
-	    <h1>Why?</h1>
-	  </section>
-	  <section>
-	    <img class="with-heading" src="cap.svg"/>
-	    <p class="caption">Benjamin Erb, <a target="_blank"
-	    href="http://berb.github.io/diploma-thesis/community/061_challenge.html">Concurrent
-	    Programming for Scalable Web Architectures</a>,
-	    CC-BY-SA</p>
-	  </section>
-	  <section>
-	    <p>Our only reliable multi-site, multi-master metadata
-	    store, <strong>MySQL+Galera</strong>, is a
-	    <strong>CP</strong> system.</p>
-	  </section>
-	  <section>
-	    <p>Several <strong>service-specific stores</strong> are
-	    also <strong>CP.</strong></p>
-	    <p class="fragment"><strong>Example:</strong> Cinder with
-	    <strong>Ceph or GlusterFS</strong></p>
-	    <p class="fragment">We would have to <strong>synchronize
-	    their replication stream</strong> with the MySQL
-	    database's.</p>
-	  </section>
-	  <section>
-	    <p>Other stores are <strong>AP</strong> (eventually
-	    consistent)</p>
-	    <p class="fragment"><strong>Example: Swift,</strong> and
-	    any service using it</p>
-	    <p class="fragment">It is <strong>fundamentally
-	    impossible</strong> to synchronize these data stores with
-	    metadata in a CP store, across multiple sites.</p>
-	  </section>
-	  <section>
-	    <h3>C+A+P? Won't happen.</h3>
-	    <img class="with-heading" src="cap.svg"/>
-	  </section>
-
-	  <section>
-	    <p>Luckily, are two</p>
-	    <h1>exceptions</h1>
-	  </section>
-	  <section>
-	    <h1>Keystone</h1>
-	    <p class="fragment">does <strong>not</strong> separate data from metadata</p>
-	    <p class="fragment"><strong>Everything</strong> lives in the database</p>
-	  </section>
-	  <section>
-	    <h1>Heat</h1>
-	    <p class="fragment">can run in <strong>standalone
-	    mode</strong></p>
-	    <p class="fragment"> managing <strong>multiple
-	    clouds.</strong></p>
-	  </section>
-	</section>
-
-	<section id="distributed-cloud-havana">
-	  <section>
-	    <h1>So:</h1>
-	  </section>
-	  <section>
-	    <h3 class="fragment">MySQL/Galera-backed Keystone</h3>
-	    <h3 class="fragment">+ per-site Keystone regions</h3>
-	    <h3 class="fragment">+ multi-cloud standalone Heat</h3>
-	    <h3 class="fragment">= geo-distributed OpenStack cloud</h3>
-	  </section>
-	  <section>
-	    <img class="full" src="distributed-cloud.svg"/>
-	    <aside class="notes">
-	      <p>It's important to understand that if we want to use
-	      Galera replication for Keystone, but no replication for
-	      any other database content, then we need
-	      <strong>separate</strong> MySQL installations for the
-	      Keystone database and the other services' databases.</p>
-	      <p>MySQL/Galera does not support selective
-	      (per-database) replication the way that legacy MySQL
-	      replication does.</p>
-	    </aside>
-	  </section>
-	</section>
-
-	<section id="distributed-cloud-beyond-havana">
-	  <section>
-	    <p>But can we</p>
-	    <h2>replicate</h2>
-	    <p>anything</p>
-	    <h2>else?</h2>
-	  </section>
-	  <section>
-	    <p>Well,</p>
-	    <h2>kind of.</h2>
-	  </section>
-	  <section>
-	    <h4><code>glance-replicator</code></h4>
-	    <img class="with-heading" src="glance-replication.svg"/>
-	    <aside class="notes">
-	      <p><a target="_blank"
-	      href="http://git.openstack.org/cgit/openstack/glance/tree/glance/cmd/replicator.py"><code>glance-replicator</code></a>
-	      has existed since Folsom. It atomically replicates both
-	      image data and metadata to a remote Glance.</p>
-	      <p>The problem with it is that it's on demand, not
-	      streaming, and it's one-way, so multi-master replication
-	      isn't part of its design. It does replicate image UUIDs,
-	      though, so it should catch duplicates and so circular
-	      replication <strong>should</strong> work.</p>
-	    </aside>
-	  </section>
-	  <section>
-	    <h4>What about Cinder?</h4>
-	    <img class="with-heading" src="cinder-replication.svg"/>
-	    <aside class="notes">
-	      <p>Its shortcomings aside,
-	      <code>glance-replicator</code> sure looks promising for
-	      the distributed cloud use case. Wouldn't it be great if
-	      we had something like it for Cinder, as well?</p>
-	    </aside>
-	  </section>
-	  <section>
-	    <p>Wait, what?</p>
-	    <h2>Continuous volume replication?</h2>
-	    <p>Like <strong><a target="_blank"
-	    href="https://etherpad.openstack.org/p/icehouse-cinder-continuous-volume-replication-v2">Volume
-	    Mirroring</a>?</strong>
-	    <aside class="notes">
-	      <p>Volume mirroring, proposed by Avishay Traeger from
-	      IBM in Haifa and discussed in the Icehouse Summit, looks
-	      like it solves this problem for us.</p>
-	      <p>But unfortunately...</p>
-	    </aside>
-	  </section>
-	  <section>
-	    <h2>Not so fast.</h2>
-	    <aside class="notes">
-	      <p>Volume mirroring, as proposed for Icehouse, will deal
-	      with replication <strong>within</strong> a single Cinder
-	      instance only, not with replication
-	      <strong>between</strong> Cinders.</p>
-	      <p>Nonetheless, this may be an important stepping stone
-	      toward true distributed cloud volume replication.</p>
-	    </aside>
-	  </section>
-	  <section>
-	    <h2>Neutron?</h2>
-	    <aside class="notes">
-	      <p>We don't have a replication story for Neutron
-	      yet. The only thing you can do there is use your own
-	      external routing and/or NAT, presumably boiling down to
-	      BGP at the edge network.</p>
-	    </aside>
-	  </section>
-	  <section>
-	    <h2>Nova?</h2>
-	    <aside class="notes">
-	      <p>No cross-cloud migration story there yet, either. But
-	      then, you should just orchestrate at the Heat level,
-	      really.</p>
-	    </aside>
-	  </section>
-	</section>
-
-	<section id="summary">
-	  <section>
-	    <h4>OpenStack Distributed Cloud (Havana Style)</h4>
-	    <img class="with-heading" src="glance-replication.svg"/>
-	  </section>
-	  <section>
-	    <h3>Unify?</h3>
-	    <h2 class="fragment">Orchestrate!</h2>
-	  </section>
-	</section>
+	<section id="plug"
+		 data-markdown="plug.md"
+		 data-separator="^\n\n\n"
+		 data-vertical="^\n\n"
+		 data-notes="^Note:" ></section>
 
 	<section>
 	  <section>
 	    <p>Liked this talk?</p>
-	    <p><a href="https://twitter.com/intent/tweet?via=hastexo&hashtags=OpenStack&related=OpenStackIL"><code>@hastexo</code></a></p>
-	    <p><a href="http://plus.google.com/+hastexo"><code>+hastexo</code></a></p>
+	    <div class="qrcode" id="qrcode-twitter"/>
+	    <p class="small"><a href="https://twitter.com/intent/tweet?via=hastexo&hashtags=PerconaLive&related=OpenStack" id="twitter"><code>@hastexo</code></a></p>
+	  </section>
+	  <section>
 	    <p><a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="by-sa.svg" alt="CC-BY-SA 3.0" /></a></p>
 	  </section>
 	  <section>
 	    <div class="qrcode" id="qrcode-github" />
-	    <p class="small"><a href="http://github.com/fghaas/openstackisraeldec2013" id="github">http://github.com/fghaas/openstackisraeldec2013</a></p>
-	  </section>
-	  <section>
-	    <div class="qrcode" id="qrcode-web" />
-	    <p class="small"><a href="http://www.hastexo.com/openstackisraeldec2013" id="web">http://www.hastexo.com/openstackisraeldec2013</a></p>
+	    <p class="small"><a href="http://github.com/fghaas/perconalive2014-openstacktoday" id="github"></a></p>
 	  </section>
 	</section>
 
@@ -421,18 +94,28 @@
 
     <script src="qrcode.js"></script>
     <script>
-function makeQRCode(src, dest) {
-    var a = document.getElementById(src);
-    var qr = new QRCode(dest, {
-	colorDark : "#000000",
-	colorLight : "rgba(255,255,255,0)",
-    });
+/* Grab all links and iterate over them */
+var sources = document.getElementsByTagName('a');
+n = sources.length;
+for (var i = 0; i < n; i++) {
+    var source = sources[i];
+    var href = source.href;
 
-    qr.makeCode(a.href)
+    /* If the link has no href attribute, skip it */
+    if (href) {
+	var target_id = "qrcode-" + source.id ;
+	var target = document.getElementById(target_id);
+	/* If the source has no corresponding target element, skip
+	 * it */
+	if (target) {
+	    var qr = new QRCode(target, {
+		colorDark : "#000000",
+		colorLight : "rgba(255,255,255,0)",
+	    });
+	    qr.makeCode(href);
+	}
+    }
 }
-
-makeQRCode("github", "qrcode-github")
-makeQRCode("web", "qrcode-web")
     </script>
 
     <script src="lib/js/head.min.js"></script>
@@ -448,7 +131,7 @@ Reveal.initialize({
     center: true,
     
     theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-    transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+    transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
     
     // Optional libraries used to extend on reveal.js
     dependencies: [
