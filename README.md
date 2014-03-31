@@ -1,9 +1,8 @@
-# Greetings from Havana
-## A fresh perspective on globally distributed OpenStack
+# What is OpenStack, and what's in it for DBAs?
 
 Florian Haas
-OpenStack Israel
-December 9, 2013
+OpenStack Today at Percona Live
+March 31, 2013
 
 These slides rely on reveal.js and qrcode.js, which they expect to be
 checked out into sibling directories named `reveal.js` and `qrcodejs`,
